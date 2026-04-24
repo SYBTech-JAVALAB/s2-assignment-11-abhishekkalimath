@@ -1,55 +1,62 @@
 import javafx.application.Application;
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
-public class Main extends Application {
+public class ArithmeticApp extends Application {
 
+    @Override
     public void start(Stage stage) {
+        TextField num1 = new TextField();
+        num1.setPromptText("Number 1");
 
-        Label message = new Label(""); // initially empty
+        TextField num2 = new TextField();
+        num2.setPromptText("Number 2");
 
-        RadioButton red = new RadioButton("Red");
-        RadioButton yellow = new RadioButton("Yellow");
-        RadioButton green = new RadioButton("Green");
+        Label result = new Label("Result: ");
 
-        ToggleGroup group = new ToggleGroup();
-        red.setToggleGroup(group);
-        yellow.setToggleGroup(group);
-        green.setToggleGroup(group);
+        Button add = new Button("+");
+        Button sub = new Button("-");
+        Button mul = new Button("*");
+        Button div = new Button("/");
 
-        // Event handling
-        red.setOnAction(e -> {
-            message.setText("STOP");
-            message.setTextFill(Color.RED);
-        });
+        add.setOnAction(e -> calculate(num1, num2, result, "+"));
+        sub.setOnAction(e -> calculate(num1, num2, result, "-"));
+        mul.setOnAction(e -> calculate(num1, num2, result, "*"));
+        div.setOnAction(e -> calculate(num1, num2, result, "/"));
 
-        yellow.setOnAction(e -> {
-            message.setText("READY");
-            message.setTextFill(Color.ORANGE);
-        });
+        HBox buttons = new HBox(10, add, sub, mul, div);
+        VBox root = new VBox(10, num1, num2, buttons, result);
+        root.setPadding(new Insets(15));
 
-        green.setOnAction(e -> {
-            message.setText("GO");
-            message.setTextFill(Color.GREEN);
-        });
-
-        VBox root = new VBox(10, message, red, yellow, green);
-
-        Scene scene = new Scene(root, 250, 200);
-        stage.setTitle("Traffic Light System");
-        stage.setScene(scene);
+        stage.setScene(new Scene(root, 300, 200));
+        stage.setTitle("Arithmetic Calculator");
         stage.show();
     }
 
+    private void calculate(TextField num1, TextField num2, Label result, String op) {
+        try {
+            int a = Integer.parseInt(num1.getText());
+            int b = Integer.parseInt(num2.getText());
+            int res = 0;
+
+            switch (op) {
+                case "+": res = a + b; break;
+                case "-": res = a - b; break;
+                case "*": res = a * b; break;
+                case "/": res = a / b; break;
+            }
+
+            result.setText("Result: " + res);
+        } catch (Exception e) {
+            result.setText("Invalid Input!");
+        }
+    }
+
     public static void main(String[] args) {
-        launch(args);
+        launch();
     }
 }
-
-
-
-
-
